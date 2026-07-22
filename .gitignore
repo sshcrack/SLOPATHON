@@ -1,0 +1,110 @@
+# --- Secrets / env ---
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cert
+*.der
+*.jks
+secrets.*
+credentials.*
+*token*
+*apikey*
+
+# --- Node / JS ---
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+.yarn/unplugged/
+.yarn/build-state.yml
+.yarn/install-state.gz
+.yarn/cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.tsbuildinfo
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.vite/
+.vitepress/cache/
+.cache/
+.parcel-cache/
+.turbo/
+coverage/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.venv/
+venv/
+ENV/
+env/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# --- Java / Kotlin / Scala ---
+*.class
+*.jar
+*.war
+*.ear
+*.iml
+target/
+.gradle/
+build/
+
+# --- Go ---
+bin/
+*.exe
+*.test
+*.out
+
+# --- Rust ---
+target/
+Cargo.lock
+
+# --- .NET ---
+bin/
+obj/
+
+# --- C/C++ ---
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# --- Logs ---
+logs/
+*.log
+
+# --- OS junk ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- IDEs / editors ---
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp

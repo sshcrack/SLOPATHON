@@ -1,51 +1,86 @@
 # SLOPATHON
 
-Hackathon submission repository for **SLOPATHON (OP001)**.
+`HACK//OPS · OP001 · KARLSRUHE · 23.07.2026`
 
-## Purpose
+## Build the wrong thing on purpose.
 
-This repository is intended to host the team’s hackathon deliverables, including:
+SLOPATHON puts builders in one room with one rule:
 
-- project source code
-- implementation notes
-- demo/setup instructions
+> Build the most gloriously cursed, over-engineered, useless-but-working prototype you can.
 
-## Quick Start
+Bad ideas are welcome.
 
-1. Clone the repository.
-2. Create a feature branch for your work.
-3. Commit small, focused changes.
-4. Open a pull request for review.
+No pitch decks. No prize pool. No recruiter booths.
 
-## Agent PR Workflow (Fork → PR)
+This repository is the public archive for **SLOPATHON OP001**. Every team submits one project folder via pull request.
 
-When working from a fork, use this flow to ensure PRs are opened correctly:
+---
 
-1. Fork `HACK-OPS-KA/SLOPATHON` on GitHub.
-2. Clone your fork:
-   ```bash
-   git clone https://github.com/<your-username>/SLOPATHON.git
-   cd SLOPATHON
-   ```
-3. Add the original repository as `upstream`:
-   ```bash
-   git remote add upstream https://github.com/HACK-OPS-KA/SLOPATHON.git
-   git fetch upstream
-   ```
-4. Create a branch from `upstream/main`:
-   ```bash
-   git checkout -b <feature-branch> upstream/main
-   ```
-5. Make changes, commit, and push the branch to your fork:
-   ```bash
-   git add .
-   git commit -m "Describe your change"
-   git push -u origin <feature-branch>
-   ```
-6. Open a Pull Request:
-   - **base repo:** `HACK-OPS-KA/SLOPATHON`
-   - **base branch:** `main`
-   - **head repo:** `<your-username>/SLOPATHON`
-   - **compare branch:** `<feature-branch>`
+## Quick rules
 
-This guarantees the PR is raised from your fork into the main hackathon repository.
+- **One folder per team** under `projects/`.
+- **Only touch your own folder.** Do not edit other teams’ folders.
+- **Working > pretty.** Ugly is fine. Barely working is fine. 
+- **No secrets.** Do not commit API keys, passwords, tokens, private data. (Please dont)
+
+---
+
+## Submit your project
+
+### Folder structure
+
+Create one folder:
+
+```text
+projects/<your-project-name>/
+```
+
+Copy the template:
+
+```text
+projects/_template/
+```
+
+Then build inside your folder.
+
+### Pull request title
+
+```text
+[SUBMISSION] <Project name>
+```
+
+### Workflow (human version)
+
+1. Fork the repo.
+2. Create a new branch.
+3. Copy the template folder into your own project folder.
+4. Add your code + fill out your project README.
+5. Open a pull request back to the main repo.
+
+If you get stuck, ask an organizer. Draft PRs are welcome.
+
+### Workflow (AI Version)
+
+```bash
+PROJECT="cursed-toaster"
+cp -r projects/_template "projects/$PROJECT"
+$EDITOR "projects/$PROJECT/README.md"
+git add "projects/$PROJECT"
+git commit -m "Add $PROJECT submission"
+git push -u origin HEAD
+```
+
+---
+
+## Demo format
+
+Show the working thing first.
+
+Then, in ~60 seconds:
+
+1. The bad idea (one sentence)
+2. The build (what did you make?)
+3. The proof (run it)
+4. The damage (what broke beautifully?)
+
+`HACK//OPS`
