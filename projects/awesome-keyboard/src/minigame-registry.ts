@@ -143,15 +143,20 @@ const chooseGoosePath = async (
   return executablePath;
 };
 
-const runGoose = async (
-  { mainWindow }: MinigameContext,
-): Promise<MinigameResult> => {
-  let executablePath = readGoosePath();
+/** Prompts during app startup so the minigame can launch without setup UI. */
+export const ensureDesktopGoosePath = async (
+  mainWindow: BrowserWindow,
+): Promise<void> => {
+  const executablePath = readGoosePath();
   if (!executablePath || !existsSync(executablePath)) {
-    executablePath = await chooseGoosePath(mainWindow);
+    await chooseGoosePath(mainWindow);
   }
-  if (!executablePath) {
-    return { status: 'cancelled', message: 'DESKTOP GOOSE CANCELLED' };
+};
+
+const runGoose = async (): Promise<MinigameResult> => {
+  const executablePath = readGoosePath();
+  if (!executablePath || !existsSync(executablePath)) {
+    return { status: 'cancelled', message: 'DESKTOP GOOSE SETUP INCOMPLETE' };
   }
   try {
     spawn(executablePath, [], {

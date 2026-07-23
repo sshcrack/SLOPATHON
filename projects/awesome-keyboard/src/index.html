@@ -36,6 +36,14 @@
         <button class="menu-label" type="button"><u>F</u>ile</button>
         <button class="menu-label" type="button"><u>H</u>elp</button>
         <p>Click the blue drop zone to release a ball.</p>
+        <div class="special-keys" aria-label="Skill-check special keys">
+          <button class="special-key" type="button" data-special-key="backspace">
+            <span>⌫</span> Backspace
+          </button>
+          <button class="special-key" type="button" data-special-key="enter">
+            <span>↵</span> Enter
+          </button>
+        </div>
         <div class="batch">
           Balls: <strong id="ball-count">00</strong>
         </div>
@@ -57,6 +65,24 @@
             <div class="reel-marker" aria-hidden="true"></div>
           </div>
           <p id="selector-result">The machine is deciding.</p>
+        </div>
+      </section>
+
+      <section
+        id="skill-check"
+        class="skill-check"
+        hidden
+        aria-label="Special key timing challenge"
+      >
+        <div class="skill-check__panel">
+          <div class="skill-check__titlebar">SPECIAL KEY SECURITY CHECK</div>
+          <p id="skill-check-label">Click when the needle crosses the green zone.</p>
+          <div class="skill-check__dial" aria-hidden="true">
+            <div class="skill-check__target"></div>
+            <div class="skill-check__hub"></div>
+            <div class="skill-check__needle"></div>
+          </div>
+          <strong id="skill-check-result">LEFT-CLICK TO ACTIVATE</strong>
         </div>
       </section>
 

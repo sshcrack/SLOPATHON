@@ -3,6 +3,10 @@ export const IPC_CLOSE_WINDOW = 'sloppy-keyboard:close-window';
 export const IPC_MINIMIZE_WINDOW = 'sloppy-keyboard:minimize-window';
 export const IPC_DRAW_MINIGAME = 'sloppy-keyboard:draw-minigame';
 export const IPC_RUN_MINIGAME = 'sloppy-keyboard:run-minigame';
+export const IPC_PRESS_SPECIAL_KEY = 'sloppy-keyboard:press-special-key';
+
+export const SPECIAL_KEYS = ['backspace', 'enter'] as const;
+export type SpecialKey = typeof SPECIAL_KEYS[number];
 
 export const MINIGAME_IDS = [
   'useless-websites',
@@ -37,6 +41,7 @@ export interface TypeResult {
 
 export interface SloppyKeyboardApi {
   typeCharacter: (character: string) => Promise<TypeResult>;
+  pressSpecialKey: (key: SpecialKey) => Promise<TypeResult>;
   drawMinigame: () => Promise<MinigameDraw>;
   runMinigame: (id: MinigameId) => Promise<MinigameResult>;
   closeWindow: () => void;

@@ -110,9 +110,13 @@ export class BoardPhysics {
     this.balls.delete(id);
   }
 
+  private isNearZero(value: number): boolean {
+    return Math.abs(value) < 0.001;
+  }
+
   private removeExpired(now: number): void {
     for (const [id, record] of this.balls) {
-      const tooOld = now - record.bornAt > 12000;
+      const tooOld = now - record.bornAt > 500 && this.isNearZero(record.body.velocity.x) && this.isNearZero(record.body.velocity.y);
       const escaped = record.body.position.y > BOARD_HEIGHT + 80;
       if (tooOld || escaped) {
         this.removeBall(id);

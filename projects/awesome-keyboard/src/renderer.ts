@@ -3,6 +3,8 @@ import { BoardPhysics } from './board-physics';
 import { BoardRenderer, LANDING_FLASH_MS } from './board-renderer';
 import { BoardState } from './board-state';
 import { MinigameReel } from './minigame-reel';
+import type { SpecialKey } from './contracts';
+import { SkillCheck } from './skill-check';
 
 const required = <T extends Element>(selector: string): T => {
   const element = document.querySelector<T>(selector);
@@ -17,16 +19,24 @@ const ballCount = required<HTMLElement>('#ball-count');
 const status = required<HTMLElement>('#status');
 const typedValue = required<HTMLElement>('#typed-value');
 const selector = new MinigameReel(required<HTMLElement>('#selector'));
+const skillCheck = new SkillCheck(required<HTMLElement>('#skill-check'));
+const specialKeyButtons = Array.from(
+  document.querySelectorAll<HTMLButtonElement>('[data-special-key]'),
+);
 
 const board = new BoardState();
 const rendererRef: { current?: BoardRenderer } = {};
-let phase: 'ready' | 'highlight' | 'selector' = 'ready';
+let phase: 'ready' | 'highlight' | 'selector' | 'skill-check' = 'ready';
 let completionTimer: number | undefined;
 
 const updateControls = (): void => {
   ballCount.textContent = String(board.activeBalls).padStart(2, '0');
+  specialKeyButtons.forEach((button) => {
+    button.disabled = phase !== 'ready' || board.activeBalls > 0;
+  });
   if (phase === 'highlight') status.textContent = 'REGISTERING HIT...';
   else if (phase === 'selector') status.textContent = 'MYSTERY EVENT ACTIVE';
+  else if (phase === 'skill-check') status.textContent = 'SPECIAL KEY CHECK ACTIVE';
   else if (board.specialPending) {
     status.textContent = `MYSTERY ARMED · ${board.activeBalls} BALLS REMAIN`;
   }
@@ -86,6 +96,29 @@ const finishAfterHighlight = (): void => {
   }, LANDING_FLASH_MS);
 };
 
+const runSpecialKey = async (key: SpecialKey): Promise<void> => {
+  if (phase !== 'ready' || board.activeBalls > 0) {
+    showStatus('WAIT FOR THE CURRENT VOLLEY');
+    return;
+  }
+  phase = 'skill-check';
+  updateControls();
+  const success = await skillCheck.run(key);
+  phase = 'ready';
+  updateControls();
+  if (!success) {
+    showStatus(`${key.toUpperCase()} BLOCKED · TIMING MISSED`, true);
+    return;
+  }
+  const result = await window.sloppyKeyboard.pressSpecialKey(key);
+  showStatus(
+    result.ok
+      ? `${key.toUpperCase()} TRANSMITTED`
+      : `${key.toUpperCase()} INPUT BLOCKED`,
+    !result.ok,
+  );
+};
+
 const physics = new BoardPhysics({
   onLanding: (_ballId, slot) => {
     const landing = board.land(slot);
@@ -131,8 +164,15 @@ canvas.addEventListener('pointerdown', (event) => {
 closeButton.addEventListener('click', () => window.sloppyKeyboard.closeWindow());
 minimizeButton.addEventListener('click', () =>
   window.sloppyKeyboard.minimizeWindow());
+specialKeyButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const key = button.dataset.specialKey as SpecialKey;
+    void runSpecialKey(key);
+  });
+});
 window.addEventListener('beforeunload', () => {
   physics.stop();
+  skillCheck.stop();
   if (completionTimer !== undefined) window.clearTimeout(completionTimer);
 });
 

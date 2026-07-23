@@ -7,14 +7,18 @@ import {
   IPC_CLOSE_WINDOW,
   IPC_DRAW_MINIGAME,
   IPC_MINIMIZE_WINDOW,
+  IPC_PRESS_SPECIAL_KEY,
   IPC_RUN_MINIGAME,
   IPC_TYPE_CHARACTER,
   MinigameResult,
+  SPECIAL_KEYS,
+  SpecialKey,
 } from './contracts';
-import { typeCharacter } from './input-service';
+import { pressSpecialKey, typeCharacter } from './input-service';
 import { drawMinigame, isMinigameId } from './minigame-data';
 import {
   closeMinigameWindows,
+  ensureDesktopGoosePath,
   runRegisteredMinigame,
 } from './minigame-registry';
 import {
@@ -70,6 +74,17 @@ app.whenReady().then(() => {
   ipcMain.handle(IPC_TYPE_CHARACTER, (_event, character: string) =>
     typeWithHookTemporarilyDisabled(() => typeCharacter(character)),
   );
+  ipcMain.handle(
+    IPC_PRESS_SPECIAL_KEY,
+    (_event, key: unknown) => {
+      if (!SPECIAL_KEYS.includes(key as SpecialKey)) {
+        return { ok: false, error: 'Unknown special key.' };
+      }
+      return typeWithHookTemporarilyDisabled(
+        () => pressSpecialKey(key as SpecialKey),
+      );
+    },
+  );
   ipcMain.handle(IPC_DRAW_MINIGAME, () => drawMinigame());
   ipcMain.handle(
     IPC_RUN_MINIGAME,
@@ -97,6 +112,9 @@ app.whenReady().then(() => {
     BrowserWindow.fromWebContents(event.sender)?.minimize(),
   );
   createWindow();
+  mainWindow.once('ready-to-show', () => {
+    void ensureDesktopGoosePath(mainWindow as BrowserWindow);
+  });
   installHook(() => app.quit());
 });
 
