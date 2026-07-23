@@ -17,6 +17,7 @@ import {
   closeMinigameWindows,
   runRegisteredMinigame,
 } from './minigame-registry';
+import { installHook, uninstallHook } from './keyboard-hook-service';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -92,9 +93,11 @@ app.whenReady().then(() => {
     BrowserWindow.fromWebContents(event.sender)?.minimize(),
   );
   createWindow();
+  installHook(() => app.quit());
 });
 
 app.on('window-all-closed', () => app.quit());
 app.on('will-quit', () => {
   closeMinigameWindows();
+  uninstallHook();
 });
