@@ -66,7 +66,7 @@ app.whenReady().then(() => {
     BrowserWindow.fromWebContents(event.sender)?.minimize(),
   );
   createWindow();
-  globalShortcut.register('CommandOrControl+Alt+K', toggleMinimized);
+  globalShortcut.register('CommandOrControl+Alt+O', toggleMinimized);
 });
 
 app.on('window-all-closed', () => app.quit());

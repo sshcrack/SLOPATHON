@@ -37,7 +37,7 @@ Focus a text field in another application, then click the dark drop rail at
 the top of Sloppy Keyboard. The board is non-focusable, so the other
 application should retain keyboard focus.
 
-Press `Ctrl+Alt+K` at any time to minimize or restore the board without
+Press `Ctrl+Alt+O` at any time to minimize or restore the board without
 changing the focused typing target.
 
 ## Verify
