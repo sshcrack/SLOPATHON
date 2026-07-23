@@ -17,7 +17,11 @@ import {
   closeMinigameWindows,
   runRegisteredMinigame,
 } from './minigame-registry';
-import { installHook, uninstallHook } from './keyboard-hook-service';
+import {
+  installHook,
+  typeWithHookTemporarilyDisabled,
+  uninstallHook,
+} from './keyboard-hook-service';
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
@@ -64,7 +68,7 @@ const createWindow = (): void => {
 
 app.whenReady().then(() => {
   ipcMain.handle(IPC_TYPE_CHARACTER, (_event, character: string) =>
-    typeCharacter(character),
+    typeWithHookTemporarilyDisabled(() => typeCharacter(character)),
   );
   ipcMain.handle(IPC_DRAW_MINIGAME, () => drawMinigame());
   ipcMain.handle(

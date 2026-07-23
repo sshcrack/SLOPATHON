@@ -4,6 +4,8 @@ import path from 'path';
 import fs from 'fs';
 
 let child: ChildProcess | null = null;
+let exitHandler: (() => void) | null = null;
+let inputQueue: Promise<unknown> = Promise.resolve();
 
 const exePath = (): string => {
   const dev = path.join(app.getAppPath(), 'native', 'keyboard-blocker.exe');
@@ -24,6 +26,7 @@ const buildIfMissing = (): boolean => {
 
 export const installHook = (onExit: () => void): void => {
   if (child) return;
+  exitHandler = onExit;
 
   if (!buildIfMissing()) return;
 
@@ -48,8 +51,38 @@ export const installHook = (onExit: () => void): void => {
 };
 
 export const uninstallHook = (): void => {
-  if (child) {
-    child.kill();
-    child = null;
+  exitHandler = null;
+  child?.kill();
+  child = null;
+};
+
+const stopHook = (): Promise<void> => new Promise((resolve) => {
+  if (!child) {
+    resolve();
+    return;
   }
+  const activeChild = child;
+  const finish = (): void => resolve();
+  activeChild.once('exit', finish);
+  activeChild.once('error', finish);
+  activeChild.kill();
+});
+
+/**
+ * Runs a synthetic keystroke while the native low-level hook is absent, then
+ * reinstalls the hook before another application action can use that window.
+ */
+export const typeWithHookTemporarilyDisabled = <T>(
+  type: () => Promise<T>,
+): Promise<T> => {
+  const task = inputQueue.then(async () => {
+    await stopHook();
+    try {
+      return await type();
+    } finally {
+      if (exitHandler) installHook(exitHandler);
+    }
+  });
+  inputQueue = task.catch((): void => undefined);
+  return task;
 };
