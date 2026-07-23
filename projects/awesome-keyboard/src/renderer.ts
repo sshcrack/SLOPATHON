@@ -5,7 +5,6 @@ import { BoardState } from './board-state';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#board');
 const closeButton = document.querySelector<HTMLButtonElement>('#close');
-const minimizeButton = document.querySelector<HTMLButtonElement>('#minimize');
 const ballCount = document.querySelector<HTMLElement>('#ball-count');
 const status = document.querySelector<HTMLElement>('#status');
 const typedValue = document.querySelector<HTMLElement>('#typed-value');
@@ -13,7 +12,6 @@ const typedValue = document.querySelector<HTMLElement>('#typed-value');
 if (
   !canvas
   || !closeButton
-  || !minimizeButton
   || !ballCount
   || !status
   || !typedValue
@@ -78,10 +76,6 @@ canvas.addEventListener('pointerdown', (event) => {
 
 closeButton.addEventListener('click', () => {
   window.sloppyKeyboard.closeWindow();
-});
-
-minimizeButton.addEventListener('click', () => {
-  window.sloppyKeyboard.minimizeWindow();
 });
 
 window.addEventListener('beforeunload', () => physics.stop());

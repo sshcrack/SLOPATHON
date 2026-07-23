@@ -5,6 +5,7 @@
   "description": "A Galton board that types whichever letter the ball finds.",
   "main": ".webpack/main",
   "private": true,
+  "packageManager": "npm@11.16.0",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -48,6 +49,7 @@
   "dependencies": {
     "@nut-tree-fork/nut-js": "^4.2.6",
     "electron-squirrel-startup": "^1.0.1",
+    "koffi": "^3.1.2",
     "matter-js": "^0.20.0"
   }
 }
